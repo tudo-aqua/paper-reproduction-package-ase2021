@@ -1,0 +1,5 @@
+(declare-const _string0 String)
+(assert (= _string0 ""))
+(assert (= _string0 "GOTCHA"))
+(assert true)
+(check-sat)

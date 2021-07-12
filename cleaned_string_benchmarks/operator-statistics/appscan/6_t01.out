@@ -1,0 +1,12 @@
+==	6
+&&	4
+not	2
+str.len	2
+assert	4
+variable	7
+str.indexof	4
+ite	2
++	4
+=	6
+-	5
+str.substr	3

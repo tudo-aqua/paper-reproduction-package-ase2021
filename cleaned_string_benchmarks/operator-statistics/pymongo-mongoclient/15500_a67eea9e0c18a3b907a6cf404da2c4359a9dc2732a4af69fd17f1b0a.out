@@ -1,0 +1,14 @@
+&&	32
+==	13
+str.contains	3
+str.len	36
+str.prefixof	2
++	8
+str.indexof	8
+-	32
+str.substr	20
+not	15
+assert	1
+variable	1
+ite	9
+>=	24

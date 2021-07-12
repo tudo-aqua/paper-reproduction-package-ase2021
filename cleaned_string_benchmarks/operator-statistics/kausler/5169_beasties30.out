@@ -1,0 +1,6 @@
+==	2060
+assert	1030
+variable	1061
+str.++	295
+=	1030
+str.substr	15

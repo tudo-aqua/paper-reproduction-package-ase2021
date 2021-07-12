@@ -1,0 +1,9 @@
+str.contains	1
+&&	1
+==	1
+assert	2
+variable	4
+ite	1
+str.indexof	1
+=	3
+str.substr	1

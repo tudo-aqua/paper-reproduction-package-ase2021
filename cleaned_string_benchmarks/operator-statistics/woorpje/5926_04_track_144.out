@@ -1,0 +1,4 @@
+assert	13
+variable	4
+str.++	26
+=	13

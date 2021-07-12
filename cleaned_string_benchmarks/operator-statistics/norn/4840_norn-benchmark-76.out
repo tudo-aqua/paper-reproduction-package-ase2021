@@ -1,0 +1,15 @@
+&&	1
+==	1
+<=	1
+str.len	2
+str.to.re	6
+*	1
++	1
+ re.union 	2
+ re.++ 	3
+not	2
+assert	2
+variable	14
+exists	1
+str.in.re	1
+re.*	2

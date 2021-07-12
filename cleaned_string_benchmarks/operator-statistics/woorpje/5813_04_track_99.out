@@ -1,0 +1,4 @@
+assert	111
+variable	3
+str.++	222
+=	111

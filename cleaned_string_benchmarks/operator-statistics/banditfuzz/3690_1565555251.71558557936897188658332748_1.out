@@ -1,0 +1,9 @@
+str.len	4
+str.at	2
+assert	5
+str.prefixof	1
+variable	15
+str.indexof	4
+<	1
+>	2
+>=	1

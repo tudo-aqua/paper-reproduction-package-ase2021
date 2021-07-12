@@ -1,0 +1,6 @@
+(declare-const _string0 String)
+(assert (= _string0 _string0))
+(declare-const _string1 String)
+(assert (not (= _string1 _string1)))
+(assert true)
+(check-sat)

@@ -1,0 +1,4 @@
+assert	90
+variable	2
+str.++	180
+=	90

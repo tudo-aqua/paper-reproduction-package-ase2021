@@ -1,0 +1,6 @@
+==	320
+assert	160
+variable	165
+str.++	41
+=	160
+str.substr	2

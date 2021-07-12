@@ -1,0 +1,17 @@
+&&	333
+==	60
+str.contains	35
+str.len	295
+str.at	2
+str.prefixof	2
+str.indexof	105
++	36
+-	354
+str.substr	212
+not	98
+assert	1
+unaryMinus	1
+variable	1
+ite	50
+=	3
+>=	284

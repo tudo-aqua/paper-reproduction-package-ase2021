@@ -1,0 +1,15 @@
+&&	8
+==	3
+str.contains	3
+str.len	4
+str.++	1
++	10
+str.indexof	10
+-	6
+str.substr	3
+not	6
+assert	1
+str.replace	1
+variable	1
+ite	3
+>=	6

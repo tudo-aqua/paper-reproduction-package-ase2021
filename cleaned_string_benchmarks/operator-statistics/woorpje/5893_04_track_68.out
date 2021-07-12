@@ -1,0 +1,4 @@
+assert	34
+variable	1
+str.++	68
+=	34

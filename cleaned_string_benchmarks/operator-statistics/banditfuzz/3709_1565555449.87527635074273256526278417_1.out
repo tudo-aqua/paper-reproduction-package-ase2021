@@ -1,0 +1,12 @@
+str.len	5
+str.at	4
+re.+	2
+assert	5
+str.prefixof	1
+str.replace	4
+variable	15
+str.in.re	1
+str.indexof	7
+<	3
+re.allchar	1
+str.substr	3

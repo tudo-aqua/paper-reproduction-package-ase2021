@@ -1,0 +1,4 @@
+assert	99
+variable	3
+str.++	198
+=	99

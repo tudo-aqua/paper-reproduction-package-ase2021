@@ -1,0 +1,13 @@
+&&	43
+==	32
+<=	26
+str.len	32
+str.++	6
+-	12
+str.substr	6
+not	60
+assert	1
+variable	2
+ite	32
+=	6
+>=	12

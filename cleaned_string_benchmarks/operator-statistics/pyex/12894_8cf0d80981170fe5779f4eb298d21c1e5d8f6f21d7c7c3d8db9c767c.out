@@ -1,0 +1,16 @@
+&&	450
+==	128
+str.contains	63
+str.len	172
+str.at	39
++	112
+str.indexof	348
+-	397
+str.substr	212
+not	229
+assert	1
+unaryMinus	3
+variable	4
+ite	117
+=	43
+>=	334

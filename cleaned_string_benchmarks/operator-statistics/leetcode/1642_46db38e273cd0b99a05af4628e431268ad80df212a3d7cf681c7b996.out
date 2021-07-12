@@ -1,0 +1,12 @@
+&&	8
+==	15
+not	15
+str.len	10
+str.at	2
+assert	1
+unaryMinus	1
+variable	3
+ite	9
++	1
+=	1
+>	2

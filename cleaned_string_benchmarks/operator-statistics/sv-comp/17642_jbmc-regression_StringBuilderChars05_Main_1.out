@@ -1,0 +1,13 @@
+&&	2
+<=	2
+str.len	4
+str.at	1
+not	2
+assert	4
+unaryMinus	1
+variable	1
+casting	2
+ite	1
+<	1
+=	1
+>=	2

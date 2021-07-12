@@ -1,0 +1,4 @@
+assert	8
+variable	1
+str.++	16
+=	8

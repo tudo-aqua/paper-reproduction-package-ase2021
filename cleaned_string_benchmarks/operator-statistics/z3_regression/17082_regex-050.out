@@ -1,0 +1,9 @@
+==	1
+str.len	1
+assert	4
+str.prefixof	1
+variable	2
+str.in.re	1
+re.*	1
+re.range	1
+=	1

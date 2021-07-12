@@ -1,0 +1,7 @@
+str.len	2
+assert	5
+variable	15
+str.in.re	2
+str.indexof	4
+<	3
+re.allchar	2

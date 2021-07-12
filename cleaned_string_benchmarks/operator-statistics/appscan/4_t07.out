@@ -1,0 +1,12 @@
+not	5
+assert	10
+str.prefixof	2
+str.to.re	4
+variable	8
+str.++	3
+str.suffixof	2
+str.in.re	2
+re.*	2
+ite	1
+=	6
+ re.union 	2

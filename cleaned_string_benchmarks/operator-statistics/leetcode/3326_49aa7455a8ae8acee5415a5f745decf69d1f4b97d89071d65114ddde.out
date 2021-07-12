@@ -1,0 +1,13 @@
+&&	31
+==	28
+<=	26
+str.len	28
+str.++	2
+-	4
+str.substr	2
+not	56
+assert	1
+variable	2
+ite	28
+=	2
+>=	4

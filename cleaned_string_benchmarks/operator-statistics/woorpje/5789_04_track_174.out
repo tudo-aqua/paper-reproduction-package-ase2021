@@ -1,0 +1,4 @@
+assert	123
+variable	7
+str.++	246
+=	123

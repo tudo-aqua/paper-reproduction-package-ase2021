@@ -1,0 +1,15 @@
+&&	60
+==	32
+str.contains	17
+str.len	37
+str.at	3
+str.indexof	2
+-	34
+str.substr	17
+not	51
+assert	1
+unaryMinus	2
+variable	2
+ite	27
+=	5
+>=	34

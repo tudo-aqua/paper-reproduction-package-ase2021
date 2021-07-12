@@ -1,0 +1,327 @@
+[tool-version] Z3 4.8.7
+[mk-app] #1 true
+[mk-app] #2 false
+[mk-app] #1 true
+[mk-app] #2 false
+[mk-app] #3 pi
+[mk-app] #4 euler
+[mk-var] datatype#0 0
+[mk-var] datatype#1 1
+[mk-app] datatype#2 insert datatype#0 datatype#1
+[mk-app] datatype#3 pattern datatype#2
+[mk-app] datatype#4 head datatype#2
+[mk-app] datatype#5 = datatype#0 datatype#4
+[mk-quant] datatype#6 constructor_accessor_axiom 2 datatype#3 datatype#5
+[attach-var-names] datatype#6 (;k!0) (;List)
+[mk-app] datatype#7 tail datatype#2
+[mk-app] datatype#8 = datatype#1 datatype#7
+[mk-quant] datatype#9 constructor_accessor_axiom 2 datatype#3 datatype#8
+[attach-var-names] datatype#9 (;k!0) (;List)
+[mk-app] #5 bv
+[attach-meaning] #5 bv #b1
+[mk-app] #6 bv
+[attach-meaning] #6 bv #b0
+[attach-meaning] #5 bv #b1
+[attach-meaning] #6 bv #b0
+[attach-meaning] #6 bv #b0
+[mk-var] #7 0
+[mk-var] #8 1
+[mk-var] #9 2
+[mk-var] #10 3
+[mk-var] #11 4
+[mk-var] #12 5
+[mk-var] #13 6
+[mk-var] #14 7
+[mk-var] #15 8
+[mk-var] #16 9
+[mk-var] #17 10
+[mk-var] #18 11
+[mk-var] #19 12
+[mk-var] #20 13
+[mk-var] #21 14
+[mk-app] #22 + #15 #13
+[attach-enode] #1 0
+[attach-enode] #2 0
+[attach-meaning] #6 bv #b0
+[attach-enode] #1 0
+[attach-enode] #2 0
+[attach-meaning] #6 bv #b0
+[mk-var] #15 0
+[mk-var] #13 1
+[mk-var] #22 2
+[mk-var] #7 3
+[mk-var] #21 4
+[mk-var] #20 5
+[mk-var] #19 6
+[mk-var] #18 7
+[mk-var] #17 8
+[mk-var] #16 9
+[mk-var] #14 10
+[mk-var] #12 11
+[mk-var] #11 12
+[mk-var] #10 13
+[mk-var] #9 14
+[mk-app] #8 + #17 #19
+[attach-enode] #1 0
+[attach-enode] #2 0
+[attach-meaning] #6 bv #b0
+[attach-enode] #1 0
+[attach-enode] #2 0
+[attach-meaning] #6 bv #b0
+[attach-enode] #1 0
+[attach-enode] #2 0
+[mk-app] #23 T_1
+[mk-app] #24 String
+[mk-app] #25 var_0xINPUT_35546
+[mk-app] #26 = #24 #25
+[mk-app] #27 = #23 #26
+[mk-app] #28 T_2
+[mk-app] #29 not #23
+[mk-app] #30 = #28 #29
+[attach-meaning] #5 bv #b1
+[attach-meaning] #6 bv #b0
+[attach-meaning] #5 bv #b1
+[attach-meaning] #6 bv #b0
+[attach-meaning] #6 bv #b0
+[attach-enode] #1 0
+[attach-enode] #2 0
+[attach-meaning] #6 bv #b0
+[attach-enode] #1 0
+[attach-enode] #2 0
+[attach-meaning] #6 bv #b0
+[attach-enode] #1 0
+[attach-enode] #2 0
+[attach-meaning] #6 bv #b0
+[attach-enode] #1 0
+[attach-enode] #2 0
+[mk-app] #31 = #1 #29
+[inst-discovered] theory-solving 0x0 basic# ; #31
+[mk-app] #32 = #31 #29
+[instance] 0x0 #32
+[attach-enode] #32 0
+[end-of-instance]
+[mk-app] #31 not #26
+[mk-app] #32 = #2 #26
+[inst-discovered] theory-solving 0x0 basic# ; #32
+[mk-app] #33 = #32 #31
+[instance] 0x0 #33
+[attach-enode] #33 0
+[end-of-instance]
+[attach-meaning] #6 bv #b0
+[attach-enode] #1 0
+[attach-enode] #2 0
+[begin-check] 0
+[attach-enode] #24 0
+[attach-enode] #25 0
+[attach-enode] #26 0
+[assign] (not #26) justification -1: 
+[mk-app] #32 PBound!tmp0
+[attach-enode] #32 0
+[mk-app] #33 QBound!tmp1
+[attach-enode] #33 0
+[attach-enode] #31 0
+[assign] #31 justification -1: (not p1)
+[mk-app] #34 str.len #24
+[attach-enode] #34 0
+[mk-app] #35 Int
+[attach-meaning] #35 arith 6
+[mk-app] #36 = #34 #35
+[attach-enode] #35 0
+[attach-enode] #36 0
+[assign] #36 axiom
+[mk-app] #37 str.len #25
+[attach-enode] #37 0
+[mk-app] #38 Int
+[attach-meaning] #38 arith 0
+[mk-app] #39 >= #37 #38
+[mk-app] #40 = #37 #38
+[mk-app] #41 String
+[mk-app] #42 = #25 #41
+[mk-app] #43 = #40 #42
+[attach-enode] #38 0
+[attach-enode] #40 0
+[attach-enode] #41 0
+[attach-enode] #42 0
+[attach-enode] #43 0
+[mk-app] #44 = #37 #35
+[mk-app] #45 not #44
+[mk-app] #46 or #44 #31
+[attach-enode] #44 0
+[attach-enode] #46 0
+[assign] #46 justification -1: (not p1)
+[mk-app] #45 not #44
+[attach-enode] #39 0
+[assign] #39 axiom
+[assign] #43 axiom
+[push] 0
+[assign] (not #42) decision axiom
+[assign] (not #40) clause (not p4) p5
+  (not (= (str.len var_0xINPUT_35546) 0::Int)) 
+  (= var_0xINPUT_35546 String[]) 
+
+[mk-app] #45 str.len #41
+[mk-app] #45 <= #37 #38
+[assign] (not #45) justification -1: (not p4) p9
+[push] 1
+[assign] (not #44) decision axiom
+[mk-app] #3 string
+[mk-app] #4 string
+[mk-app] #3 string
+[mk-app] #4 string
+[mk-app] #3 string
+[mk-app] #4 string
+[mk-app] #47 arr_"https:"!tmp2
+[attach-enode] #47 0
+[mk-app] #48 select #47 #38
+[attach-enode] #48 0
+[mk-app] #49 Int
+[attach-meaning] #49 arith 104
+[mk-app] #50 = #48 #49
+[attach-enode] #49 0
+[attach-enode] #50 0
+[mk-app] #51 Int
+[attach-meaning] #51 arith 1
+[mk-app] #52 select #47 #51
+[attach-enode] #51 0
+[attach-enode] #52 0
+[mk-app] #53 Int
+[attach-meaning] #53 arith 116
+[mk-app] #54 = #52 #53
+[attach-enode] #53 0
+[attach-enode] #54 0
+[mk-app] #55 Int
+[attach-meaning] #55 arith 2
+[mk-app] #56 select #47 #55
+[attach-enode] #55 0
+[attach-enode] #56 0
+[attach-meaning] #53 arith 116
+[mk-app] #57 = #56 #53
+[attach-enode] #57 0
+[mk-app] #58 Int
+[attach-meaning] #58 arith 3
+[mk-app] #59 select #47 #58
+[attach-enode] #58 0
+[attach-enode] #59 0
+[mk-app] #60 Int
+[attach-meaning] #60 arith 112
+[mk-app] #61 = #59 #60
+[attach-enode] #60 0
+[attach-enode] #61 0
+[mk-app] #62 Int
+[attach-meaning] #62 arith 4
+[mk-app] #63 select #47 #62
+[attach-enode] #62 0
+[attach-enode] #63 0
+[mk-app] #64 Int
+[attach-meaning] #64 arith 115
+[mk-app] #65 = #63 #64
+[attach-enode] #64 0
+[attach-enode] #65 0
+[mk-app] #66 Int
+[attach-meaning] #66 arith 5
+[mk-app] #67 select #47 #66
+[attach-enode] #66 0
+[attach-enode] #67 0
+[mk-app] #68 Int
+[attach-meaning] #68 arith 58
+[mk-app] #69 = #67 #68
+[attach-enode] #68 0
+[attach-enode] #69 0
+[mk-app] #70 and #50 #54 #57 #61 #65 #69
+[attach-enode] #70 0
+[assign] #70 axiom
+[mk-app] #3 string
+[mk-app] #4 string
+[mk-app] #71 arr_""!tmp3
+[attach-enode] #71 0
+[mk-app] #3 string
+[mk-app] #4 string
+[mk-app] #3 string
+[mk-app] #4 string
+[mk-app] #3 string
+[mk-app] #4 string
+[mk-app] #3 string
+[mk-app] #4 string
+[mk-app] #72 not #44
+[assign] #50 clause p11 (not p17)
+  (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 0::Int) 104::Int) 
+  (not (and (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 0::Int) 104::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 1::Int) 116::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 2::Int) 116::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 3::Int) 112::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 4::Int) 115::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 5::Int) 58::Int))) 
+
+[assign] #54 clause p12 (not p17)
+  (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 1::Int) 116::Int) 
+  (not (and (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 0::Int) 104::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 1::Int) 116::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 2::Int) 116::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 3::Int) 112::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 4::Int) 115::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 5::Int) 58::Int))) 
+
+[assign] #57 clause p13 (not p17)
+  (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 2::Int) 116::Int) 
+  (not (and (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 0::Int) 104::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 1::Int) 116::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 2::Int) 116::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 3::Int) 112::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 4::Int) 115::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 5::Int) 58::Int))) 
+
+[assign] #61 clause p14 (not p17)
+  (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 3::Int) 112::Int) 
+  (not (and (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 0::Int) 104::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 1::Int) 116::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 2::Int) 116::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 3::Int) 112::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 4::Int) 115::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 5::Int) 58::Int))) 
+
+[assign] #65 clause p15 (not p17)
+  (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 4::Int) 115::Int) 
+  (not (and (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 0::Int) 104::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 1::Int) 116::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 2::Int) 116::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 3::Int) 112::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 4::Int) 115::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 5::Int) 58::Int))) 
+
+[assign] #69 clause p16 (not p17)
+  (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 5::Int) 58::Int) 
+  (not (and (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 0::Int) 104::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 1::Int) 116::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 2::Int) 116::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 3::Int) 112::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 4::Int) 115::Int) (= (select arr_"https:"!tmp2[arr_"https:"!tmp2] 5::Int) 58::Int))) 
+
+[mk-app] #72 <= #37 #35
+[mk-app] #73 >= #37 #35
+[push] 2
+[assign] (not #72) decision axiom
+[assign] #73 clause p19 p18
+  (>= (str.len var_0xINPUT_35546) 6::Int) 
+  (<= (str.len var_0xINPUT_35546) 6::Int) 
+
+[mk-app] #74 Int
+[attach-meaning] #74 arith 7
+[attach-meaning] #49 arith 104
+[attach-meaning] #53 arith 116
+[attach-meaning] #60 arith 112
+[attach-meaning] #64 arith 115
+[attach-meaning] #68 arith 58
+[mk-app] #75 Int
+[attach-meaning] #75 arith 8
+[mk-app] #76 Int
+[attach-meaning] #76 arith 9
+[mk-app] #77 String
+[mk-app] #78 as-array
+[mk-app] #79 as-array
+[attach-meaning] #5 bv #b1
+[attach-meaning] #6 bv #b0
+[attach-meaning] #5 bv #b1
+[attach-meaning] #6 bv #b0
+[attach-meaning] #6 bv #b0
+[attach-enode] #1 0
+[attach-enode] #2 0
+[attach-meaning] #6 bv #b0
+[attach-enode] #1 0
+[attach-enode] #2 0
+[attach-meaning] #5 bv #b1
+[attach-meaning] #6 bv #b0
+[attach-meaning] #5 bv #b1
+[attach-meaning] #6 bv #b0
+[attach-meaning] #6 bv #b0
+[attach-enode] #1 0
+[attach-enode] #2 0
+[attach-meaning] #6 bv #b0
+[attach-enode] #1 0
+[attach-enode] #2 0
+[mk-app] #3 string
+[mk-app] #4 indent #3
+[mk-app] #5 string
+[mk-app] #3 string
+[mk-app] #4 string
+[mk-app] #3 string
+[mk-app] #4 indent #3
+[mk-app] #5 string
+[mk-app] #3 string
+[mk-app] #4 string
+[mk-app] #3 string
+[mk-app] #4 indent #3
+[mk-app] #5 string
+[mk-app] #3 string
+[mk-app] #4 string
+[eof]

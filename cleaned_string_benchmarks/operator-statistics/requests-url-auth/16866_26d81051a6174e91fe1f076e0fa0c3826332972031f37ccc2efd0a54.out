@@ -1,0 +1,11 @@
+&&	5
+==	2
+not	5
+assert	1
+variable	1
+ite	2
+str.indexof	4
+=	2
+-	4
+str.substr	2
+>=	4

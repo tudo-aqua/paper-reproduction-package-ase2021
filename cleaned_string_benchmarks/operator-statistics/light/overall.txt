@@ -1,0 +1,4 @@
+Operator: assert occurs: 300
+Operator: variable occurs: 571
+Operator: str.++ occurs: 1200
+Operator: = occurs: 300

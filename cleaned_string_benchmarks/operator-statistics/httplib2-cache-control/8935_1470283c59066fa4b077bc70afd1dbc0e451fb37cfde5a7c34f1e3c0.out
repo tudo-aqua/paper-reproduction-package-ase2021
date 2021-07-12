@@ -1,0 +1,12 @@
+&&	7
+==	12
+str.contains	1
+not	14
+str.len	2
+str.at	1
+assert	1
+unaryMinus	2
+variable	2
+ite	8
+str.indexof	2
+=	3

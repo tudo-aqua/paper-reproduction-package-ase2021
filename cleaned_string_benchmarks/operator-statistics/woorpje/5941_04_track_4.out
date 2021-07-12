@@ -1,0 +1,4 @@
+assert	17
+variable	3
+str.++	34
+=	17

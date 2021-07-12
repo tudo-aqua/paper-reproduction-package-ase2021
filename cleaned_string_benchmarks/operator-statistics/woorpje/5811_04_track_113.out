@@ -1,0 +1,4 @@
+assert	44
+variable	1
+str.++	88
+=	44

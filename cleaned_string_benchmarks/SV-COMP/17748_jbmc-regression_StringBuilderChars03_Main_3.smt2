@@ -1,0 +1,6 @@
+(declare-const _string0 String)
+(assert (and (< 1 (str.len _string0)) (< 0 (str.len _string0))))
+(assert (and (< 5 (str.len _string0)) (< 0 (str.len _string0))))
+(assert (not (= (str.at _string0 (ite (bvslt #x00000000 #x00000000) (- (bv2nat #x00000000)) (bv2nat #x00000000))) (str.at _string0 (ite (bvslt #x00000004 #x00000000) (- (bv2nat #x00000004)) (bv2nat #x00000004))))))
+(assert (and (and true (<= -2 (str.len _string0))) (<= (str.len _string0) 2)))
+(check-sat)

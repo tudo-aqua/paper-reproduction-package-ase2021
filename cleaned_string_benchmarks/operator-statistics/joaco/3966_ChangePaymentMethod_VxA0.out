@@ -1,0 +1,14 @@
+==	8
+re.+	5
+str.to.re	12
+str.++	1
+re.range	1
+int.to.str	2
+ re.union 	2
+ re.++ 	10
+not	1
+assert	8
+variable	9
+str.in.re	1
+=	6
+>=	1

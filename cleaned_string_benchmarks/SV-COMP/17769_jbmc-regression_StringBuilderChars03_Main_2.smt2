@@ -1,0 +1,5 @@
+(declare-const _string0 String)
+(assert (and (< 1 (str.len _string0)) (< 0 (str.len _string0))))
+(assert (and (< 5 (str.len _string0)) (< 0 (str.len _string0))))
+(assert (and (and true (<= -8 (str.len _string0))) (<= (str.len _string0) 8)))
+(check-sat)

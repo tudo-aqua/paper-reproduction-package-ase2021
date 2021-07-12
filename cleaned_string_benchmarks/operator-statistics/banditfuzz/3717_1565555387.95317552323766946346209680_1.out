@@ -1,0 +1,7 @@
+str.contains	4
+not	1
+str.at	1
+assert	5
+str.replace	3
+variable	15
+>=	1

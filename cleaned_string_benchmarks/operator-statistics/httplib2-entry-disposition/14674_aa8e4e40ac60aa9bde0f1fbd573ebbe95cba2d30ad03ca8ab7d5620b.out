@@ -1,0 +1,16 @@
+&&	270
+==	93
+str.contains	38
+str.len	78
+str.at	31
+str.indexof	165
++	4
+-	285
+str.substr	122
+not	161
+assert	1
+unaryMinus	3
+variable	4
+ite	83
+=	35
+>=	188

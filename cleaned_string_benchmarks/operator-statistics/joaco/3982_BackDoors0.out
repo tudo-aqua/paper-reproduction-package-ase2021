@@ -1,0 +1,14 @@
+==	13
+re.+	2
+str.to.re	18
+str.++	1
+re.allchar	3
+ re.union 	3
+ re.++ 	17
+not	1
+assert	9
+unaryMinus	1
+variable	11
+str.in.re	1
+re.*	4
+=	5

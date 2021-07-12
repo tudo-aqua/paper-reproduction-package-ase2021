@@ -1,0 +1,8 @@
+(declare-const _string0 String)
+(assert (bvsge (bvsub ((_ int2bv 32) (str.len _string0)) #x00000001) #x00000000))
+(assert (bvsle #x00000000 (bvsub ((_ int2bv 32) (str.len _string0)) #x00000001)))
+(assert (bvslt (bvsub ((_ int2bv 32) (str.len _string0)) #x00000001) ((_ int2bv 32) (str.len _string0))))
+(declare-const _string1 String)
+(assert (bvslt #x00000000 ((_ int2bv 32) (str.len _string1))))
+(assert (and (and (and (and true (<= -2 (str.len _string1))) (<= (str.len _string1) 2)) (<= -2 (str.len _string0))) (<= (str.len _string0) 2)))
+(check-sat)

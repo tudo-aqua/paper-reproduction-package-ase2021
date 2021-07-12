@@ -1,0 +1,5 @@
+assert	2
+str.replace	1
+variable	4
+str.++	1
+=	2

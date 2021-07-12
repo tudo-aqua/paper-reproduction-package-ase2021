@@ -1,0 +1,4 @@
+assert	64
+variable	2
+str.++	128
+=	64

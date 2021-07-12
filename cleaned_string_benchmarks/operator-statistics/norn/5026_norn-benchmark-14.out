@@ -1,0 +1,13 @@
+&&	9
+<=	10
+str.len	14
+str.to.re	4
+str.++	1
+*	4
++	14
+ re.union 	1
+ re.++ 	2
+assert	2
+unaryMinus	10
+variable	13
+str.in.re	1

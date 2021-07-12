@@ -1,0 +1,12 @@
+&&	9
+==	10
+not	11
+str.len	10
+str.at	4
+assert	1
+variable	1
+ite	10
+-	12
+=	2
+>	3
+>=	5

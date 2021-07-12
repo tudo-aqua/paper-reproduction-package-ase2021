@@ -1,0 +1,15 @@
+str.contains	1
+<=	1
+str.len	3
+str.at	4
+str.prefixof	1
+str.indexof	4
+re.allchar	3
+str.substr	1
+ re.inter 	1
+assert	7
+str.replace	2
+variable	18
+str.in.re	2
+>	1
+>=	1

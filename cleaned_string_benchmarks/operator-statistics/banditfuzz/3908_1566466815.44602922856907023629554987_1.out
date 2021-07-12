@@ -1,0 +1,11 @@
+<=	1
+str.len	7
+str.at	3
+assert	7
+str.replace	3
+variable	18
+str.suffixof	1
+str.indexof	7
+>	3
+str.substr	7
+>=	2

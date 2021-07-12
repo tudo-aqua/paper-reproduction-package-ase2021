@@ -1,0 +1,4 @@
+assert	110
+variable	2
+str.++	220
+=	110

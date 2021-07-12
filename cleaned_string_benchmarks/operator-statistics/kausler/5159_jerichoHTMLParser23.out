@@ -1,0 +1,8 @@
+==	1050
+str.len	10
+assert	520
+variable	626
+str.++	20
+=	510
+-	10
+str.substr	10

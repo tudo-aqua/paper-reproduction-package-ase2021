@@ -1,0 +1,11 @@
+&&	1
+<=	2
+not	1
+str.len	2
+assert	5
+str.to.re	1
+variable	13
+str.++	3
+str.in.re	4
+re.*	4
+re.range	3

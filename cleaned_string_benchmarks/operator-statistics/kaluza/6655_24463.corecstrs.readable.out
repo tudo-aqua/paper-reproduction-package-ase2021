@@ -1,0 +1,15 @@
+==	12
+&&	10
+str.len	3
+str.to.re	30
+str.++	4
++	1
+ re.++ 	28
+not	5
+assert	10
+unaryMinus	3
+variable	15
+str.in.re	2
+ite	1
+<	1
+=	7

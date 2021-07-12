@@ -1,0 +1,8 @@
+<=	5
+str.len	8
+assert	13
+variable	5
+str.++	10
+*	8
+=	5
+>=	3

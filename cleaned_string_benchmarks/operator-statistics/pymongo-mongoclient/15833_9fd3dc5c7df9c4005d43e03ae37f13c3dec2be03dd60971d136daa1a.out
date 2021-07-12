@@ -1,0 +1,17 @@
+&&	274
+==	51
+str.contains	31
+str.len	223
+str.at	2
+str.prefixof	2
++	16
+str.indexof	81
+-	280
+str.substr	164
+not	84
+assert	1
+unaryMinus	1
+variable	1
+ite	43
+=	2
+>=	232

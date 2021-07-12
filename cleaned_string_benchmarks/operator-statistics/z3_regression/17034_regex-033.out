@@ -1,0 +1,9 @@
+str.len	2
+assert	3
+str.to.re	1
+variable	4
+str.++	2
+str.in.re	1
+re.*	1
+<	1
+=	1

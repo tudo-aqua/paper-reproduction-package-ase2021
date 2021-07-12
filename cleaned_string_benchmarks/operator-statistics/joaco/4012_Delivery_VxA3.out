@@ -1,0 +1,18 @@
+==	92
+||	1
+<=	1
+re.+	2
+str.to.re	18
+str.++	54
+-	1
+re.allchar	3
+int.to.str	11
+ re.union 	3
+ re.++ 	17
+not	5
+assert	78
+unaryMinus	1
+variable	89
+str.in.re	1
+re.*	4
+=	63

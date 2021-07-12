@@ -1,0 +1,13 @@
+&&	83
+==	60
+<=	52
+str.len	64
+str.++	12
+-	24
+str.substr	12
+not	88
+assert	1
+variable	2
+ite	60
+=	8
+>=	24

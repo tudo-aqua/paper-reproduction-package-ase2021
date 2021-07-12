@@ -1,0 +1,13 @@
+&&	4
+==	4
+str.contains	2
+str.len	3
++	4
+str.indexof	4
+-	2
+str.substr	1
+not	6
+assert	1
+variable	1
+ite	3
+>=	2

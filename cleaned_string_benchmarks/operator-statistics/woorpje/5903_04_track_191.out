@@ -1,0 +1,4 @@
+assert	24
+variable	4
+str.++	48
+=	24

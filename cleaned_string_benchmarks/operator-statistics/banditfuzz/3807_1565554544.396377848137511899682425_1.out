@@ -1,0 +1,10 @@
+str.contains	2
+<=	1
+str.len	5
+assert	5
+str.replace	3
+variable	15
+str.indexof	3
+>	1
+>=	1
+str.substr	3

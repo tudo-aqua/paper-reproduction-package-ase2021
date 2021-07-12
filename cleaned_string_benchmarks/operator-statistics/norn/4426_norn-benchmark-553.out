@@ -1,0 +1,8 @@
+not	1
+assert	6
+variable	13
+str.++	4
+re.nostr	2
+str.in.re	6
+re.*	4
+re.range	4

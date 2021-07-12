@@ -1,0 +1,17 @@
+&&	1392
+==	96
+str.contains	47
+str.len	1446
+str.at	2
+str.prefixof	4
+str.indexof	590
++	24
+-	2019
+str.substr	1360
+not	139
+assert	1
+unaryMinus	2
+variable	1
+ite	75
+=	3
+>=	1318

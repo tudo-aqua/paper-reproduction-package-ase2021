@@ -1,0 +1,4 @@
+assert	1
+variable	15
+str.++	30
+=	1

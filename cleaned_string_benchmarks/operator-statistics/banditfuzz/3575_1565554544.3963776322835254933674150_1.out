@@ -1,0 +1,10 @@
+str.contains	1
+<=	1
+not	1
+str.len	2
+assert	5
+variable	15
+str.in.re	1
+re.allchar	1
+str.substr	1
+>=	1

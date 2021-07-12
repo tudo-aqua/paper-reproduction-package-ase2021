@@ -1,0 +1,4 @@
+assert	26
+variable	4
+str.++	52
+=	26

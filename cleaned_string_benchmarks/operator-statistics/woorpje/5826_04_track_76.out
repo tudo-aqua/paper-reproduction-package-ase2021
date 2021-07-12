@@ -1,0 +1,4 @@
+assert	70
+variable	5
+str.++	140
+=	70

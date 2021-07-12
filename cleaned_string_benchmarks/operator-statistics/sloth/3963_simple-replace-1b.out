@@ -1,0 +1,4 @@
+assert	2
+variable	2
+=	2
+str.replaceall	1

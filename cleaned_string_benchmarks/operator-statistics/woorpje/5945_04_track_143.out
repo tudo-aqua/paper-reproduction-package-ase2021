@@ -1,0 +1,4 @@
+assert	101
+variable	4
+str.++	202
+=	101

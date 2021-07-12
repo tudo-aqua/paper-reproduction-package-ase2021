@@ -1,0 +1,5 @@
+str.at	5
+assert	36
+variable	61
+str.++	30
+=	36

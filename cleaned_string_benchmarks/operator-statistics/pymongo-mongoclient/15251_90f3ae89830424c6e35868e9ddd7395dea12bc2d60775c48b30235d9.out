@@ -1,0 +1,17 @@
+&&	2018
+==	100
+str.contains	59
+str.len	4041
+str.at	2
+str.prefixof	2
++	1492
+str.indexof	1708
+-	4251
+str.substr	3283
+not	160
+assert	1
+unaryMinus	2
+variable	1
+ite	83
+=	2
+>=	1939

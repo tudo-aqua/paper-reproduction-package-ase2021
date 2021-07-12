@@ -1,0 +1,6 @@
+assert	3
+variable	13
+str.++	1
+str.in.re	3
+re.*	3
+re.range	3

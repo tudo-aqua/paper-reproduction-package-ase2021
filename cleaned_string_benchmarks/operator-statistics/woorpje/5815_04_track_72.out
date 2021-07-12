@@ -1,0 +1,4 @@
+assert	52
+variable	1
+str.++	104
+=	52

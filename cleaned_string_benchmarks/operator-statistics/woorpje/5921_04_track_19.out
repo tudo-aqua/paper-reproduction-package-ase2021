@@ -1,0 +1,4 @@
+assert	49
+variable	3
+str.++	98
+=	49

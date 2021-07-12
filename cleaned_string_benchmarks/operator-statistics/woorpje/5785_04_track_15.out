@@ -1,0 +1,4 @@
+assert	150
+variable	6
+str.++	300
+=	150

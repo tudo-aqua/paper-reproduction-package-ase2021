@@ -1,0 +1,15 @@
+&&	147
+==	8
+str.contains	8
+str.len	256
+str.++	6
++	524
+str.indexof	524
+-	268
+str.substr	198
+not	14
+assert	1
+str.replace	6
+variable	1
+ite	8
+>=	140

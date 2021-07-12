@@ -1,0 +1,13 @@
+str.len	4
+str.at	2
+str.prefixof	1
+str.++	1
+str.indexof	11
+str.substr	4
+not	2
+assert	7
+str.replace	3
+variable	18
+<	1
+>	2
+>=	3

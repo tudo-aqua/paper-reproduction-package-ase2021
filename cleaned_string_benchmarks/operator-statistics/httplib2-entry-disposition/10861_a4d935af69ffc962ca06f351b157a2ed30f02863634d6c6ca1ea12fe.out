@@ -1,0 +1,11 @@
+&&	5
+==	9
+str.contains	1
+not	11
+str.len	2
+assert	1
+unaryMinus	1
+variable	2
+ite	6
+str.indexof	1
+=	2

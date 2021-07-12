@@ -1,0 +1,12 @@
+<=	1
+not	1
+str.len	2
+assert	5
+str.replace	1
+variable	15
+str.in.re	1
+re.*	2
+str.indexof	2
+<	2
+>	1
+re.allchar	1

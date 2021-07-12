@@ -1,0 +1,13 @@
+str.contains	3
+&&	3
+==	6
+str.len	2
+str.++	2
+str.indexof	1
+-	4
+str.substr	2
+not	3
+assert	6
+variable	10
+ite	3
+=	6
