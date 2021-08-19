@@ -212,7 +212,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if args.originial:
         BENCHMARKS.remove(("SVCOMP", "SV-COMP", "198"))
-        BENCHMARKS.append(("SVCOMP", "jdart", "198"))
+        BENCHMARKS.insert(8, ("SVCOMP", "jdart", "198"))
         gen_table("../database/string_schema.sqlite")
     else:
         gen_table("../database/test.sqlite")

@@ -7,9 +7,11 @@ of SMT Meta-Solving Strategies: Balancing Performance, Accuracy, and Cost
 "
 by Malte Mues and Falk Howar, accepted for Automated Software Engineering 2021 (ASE 2021).
 
-Here is the abstract so that you already have an idea of the paper's goal:
+The reproduction package allows to rerun the analysis presented in the paper and contains the data from solver runs used to compute the presented figures. You might use the data presented in the SQLite database to create your own solver strategy and compute an estimate for the potential of your strategy. In the future, you might transfer the analysis method for other domains than string solving.
 
-> Many modern software engineering tools integrate SMT decision procedures and rely on the accuracy and performance of SMT solvers. We describe four basic patterns for integrating constraint solvers (earliest verdict, majority vote, feature-based solver selection, and verdict-based second attempt) that can be used for combining individual solvers into meta-decision procedures that balance accuracy, performance, and cost – or optimize for one of these metrics. In order to evaluate the effectiveness of meta-solving, we analyze and minimize 16 existing benchmark suites and benchmark seven state-of-the-art SMT solvers on 17k unique instances. From the obtained performance data, we can estimate the performance of different meta-solving strategies. We validate our results by implementing and analyzing one strategy. As additional results, we obtain (a) the first benchmark suite of unique SMT string problems with validated expected verdicts, (b) an extensive dataset containing data on benchmark instances as well as on the performance of individual decision procedures and several meta-solving strategies on these instances, and (c) a framework for generating data that can easily be used for similar analyses on different benchmark instances or for different decision procedures.
+If you have not read the paper yet, here is the abstract so that you already have an idea of the paper's goal:
+
+> Many modern software engineering tools integrate SMT decision procedures and rely on the accuracy and performance of SMT solvers. We describe four basic patterns for integrating constraint solvers (earliest verdict, majority vote, feature-based solver selection, and verdict-based second attempt) that can be used for combining individual solvers into meta-decision procedures that balance accuracy, performance, and cost – or optimize for one of these metrics. In order to evaluate the effectiveness of meta-solving, we analyze and minimize 16 existing benchmark suites and benchmark seven state-of-the-art SMT solvers on 17k unique instances. From the obtained performance data, we can estimate the performance of different meta-solving strategies. We validate our results by implementing and analyzing two strategies. As additional results, we obtain (a) the first benchmark suite of unique SMT string problems with validated expected verdicts, (b) an extensive dataset containing data on benchmark instances as well as on the performance of individual decision procedures and several meta-solving strategies on these instances, and (c) a framework for generating data that can easily be used for similar analyses on different benchmark instances or for different decision procedures.
 
 As stated, the contribution consist of multiple steps. The documentation of the reproduction package is oriented along these steps. It will first present the duplicate detection and operator feature computation. In continuation, we present the ground truth computation and the conducted performance analysis. The material for the feature-based solver selection concludes the reproduction package.
 
@@ -20,12 +22,12 @@ We have detected duplicates in the benchmark that are equally structured program
 The binary will create `*.analysis` files that contain some
 statistics about the analyzed SMT problems.
 The program requires at least 64 GB RAM to succeed and also some time,
-especially for analyzing the PyEx benchmark.
-Change to the `cleaned_string_benchmarks` folder and run:
+especially for analyzing the PyEx benchmark. Assuming you are in the top level folder of the reproduction package,
+change to the `cleaned_string_benchmarks` folder and run:
 `./run_duplicate_computation.sh` to rerun the duplicate detection algorithm on the complete data set.
 You will find hints in the script, if you just want to rerun the duplicate detection on a subset of the data set.
 If the script is run on the original data set, it will produce a long lists of duplicates after each problem in the `*.analysis` files. They are not available on the cleaned benchmarks that we ship with the reproduction package.
-The `clean_duplicates.py` script has been used to remove the files listed in the analysis output from the file system.
+The `clean_duplicates.py` script has been used to remove the files listed in the analysis output from the file system. You do not have to run it as part of the reproduction package, but it will help, if you want to reproduce the benchmark tasks reduction as presented in the paper.
 
 There is one Problem in the z3_regression folder
 (named Z3str3 in the paper Table 1) that cannot be parsed
@@ -43,11 +45,13 @@ gov.nasa.jpf.constraints.smtlibUtility.parser.SMTLIBParserNotSupportedException:
     ...
 ```
 
+The error is expected and only signals, that we ignore this one test case in the paper as JConstraints does not handle the `(define-fun) ...` command
+from SMT-Lib language correctly. Strictly this is part of the QF_UF theory and out of scope for the paper as we work with QF_S and QF_SLIA solvers mainly.
 
 Operator Features
 --------------------
 The operators use in the benchmarks are also counted using the (JConstraints library)[https://github.com/tudo-aqua/jconstraints/tree/develop/jconstraints-runner/src/main/java/tools]. The source code is available on GitHub in our JConstraints repository.
-We ship in the reproduction package the exact binary version used for the paper, as the tool is continuously improved. Just change into `cleand_string_benchmarks/operator-statistics` and run: `./run-all.sh`. The script will output for each benchmark file an `*.out` file that contains the used operators. For example, the file `5_t06.out` belonging to the appscan benchmark `5_t06smt2` looks as follows:
+We ship in the reproduction package the exact binary version used for the paper, as the tool is continuously improved. Assuming you are in the top level folder of the reproduction package, just change into `cleaned_string_benchmarks/operator-statistics` and run: `./run-all.sh`. The script will output for each benchmark file an `*.out` file that contains the used operators. For example, the file `5_t06.out` belonging to the appscan benchmark `5_t06smt2` looks as follows:
 
 ```
 ==  2
@@ -79,17 +83,17 @@ We describe first how to create Table 1 with the provided data and in continuati
 the required steps to reproduce the tables.
 
 #### Computing Table 1
-In the figures folder, there is the script `./generate_table1.py`. It accepts the flag `-o`, if you want to generate the figures with the provided data. You might run it without the flag, to use your freshly computed data. The script will generate the file `figures/tables/features/feature_table.tex`. If you compile this file with pdflatex, you will get Table 1.
+In the figures folder, there is the script `./generate_table1.py`. It accepts the flag `-o`, if you want to generate the figures with the provided data. You might run it without the flag, to use your freshly computed data but you have to execute the _Loading the Fresh Data_ step described next first. The script will generate the file `figures/tables/features/feature_table.tex`. If you compile this file with pdflatex, you will get Table 1.
 
 #### Loading the Fresh Data
-We provide two scripts. Change to the scripts folder and run them:
+We provide two scripts. Assuming you are in the top level folder of the artifact, change to the scripts folder and run them:
 ```
 cd scripts
 ./import_feature_per_file.py
 ./load_benchmarks.py -f ../cleaned_string_benchmarks/
 ```
 
-The load_benchmarks script finds the benchmarks by indexing the folder passed as argument value. This is supposed to work out of the box.
+The load_benchmarks script finds the benchmarks by indexing the folder passed as argument value. This is supposed to work out of the box. The script uses the `sha1sum` command to compute hashes of the benchmarks files. If `sha1sum` is not available as a command on your path this might fail. On modern OSX systems, the command is called `shasum` now. The script tests this as a fall back. If loading fails, you cannot reload the data for table 1 from the run on you PC, but the package allows to compare our computed data with the feature data computed by the `run-all.sh` script above.
 
 Solver Runs
 -----------

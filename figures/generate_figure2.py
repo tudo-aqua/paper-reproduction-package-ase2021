@@ -125,10 +125,6 @@ def compute_heatmap():
             print(r"\\ \cline{2-10}", file=outfile)
         print("\\end{tabular}", file=outfile)
         print(r"}", file=outfile)
-        print(
-            r"\caption{This heatmap summaries the voting behavior of the solver set. We excluded \texttt{JCVC4}, \texttt{JZ3SEQ}, and \texttt{MULTI} from the voting to balance the solver chares fair. The value in brackets are validated SAT models produced and validated by \texttt{JCVC4} and \texttt{JZ3SEQ}. We have only attempted to validate SAT models for these two solvers.}",
-            file=outfile,
-        )
         print(r"\label{fig:heatmap}", file=outfile)
         print("\\end{figure}", file=outfile)
         print(r"\end{document}", file=outfile)

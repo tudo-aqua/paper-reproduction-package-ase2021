@@ -93,7 +93,7 @@ JOINED_HEAD = r"""\documentclass[]{article}
 \begin{figure}
 \begin{tikzpicture}"""
 
-JOINED_FOOTER = r"""\legend{false, true, unknown, ERROR, OUT OF MEMORY, TIMEOUT}
+JOINED_FOOTER = r"""\legend{UNSAT, SAT, unknown, ERROR, OUT OF MEMORY, TIMEOUT}
 \end{axis}
 \end{tikzpicture}
 \end{figure}

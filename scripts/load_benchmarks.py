@@ -48,6 +48,15 @@ def call_sha1sum(file, cwd):
     except CalledProcessError:
         print("sha1sum error on: ", file)
         return "-1"
+    except Exception:
+        result = run(["shasum", file], cwd=cwd, capture_output=True)
+        try:
+            result.check_returncode()
+            sha = result.stdout.decode().split(" ")[0]
+            return sha
+        except CalledProcessError:
+            print("sha1sum error on: ", file)
+            return "-1"
 
 
 class ImporterThread(threading.Thread):

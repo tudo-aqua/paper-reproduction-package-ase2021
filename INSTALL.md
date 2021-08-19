@@ -7,7 +7,7 @@ We have run them with python 3.9 and a normal shell. We tested the scripts on OS
 The scripts will not run on Windows.
 
 As a first step, clone the repository. Change to the `figures` folder
-and run any of the scripts. For testing, we recomend `generate_table1.py`.
+and run any of the scripts. For testing, we recomend `generate_table1.py -o`.
 
 For reproducing Table 3, a couple of python packages are required that are not part of the standard python library.
 Change to the `figures` folder and install them from the requirements.txt with: `pip install -r requirements.txt`.
