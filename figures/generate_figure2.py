@@ -6,6 +6,7 @@ from itertools import product
 
 
 conn = sqlite3.connect("../database/string_schema.sqlite")
+conn2022 = sqlite3.connect("../database/string_schema_ase_journal.sqlite")
 HEATMAP_QUERY = """
 select
         (total % 100) as sat,
@@ -39,16 +40,65 @@ CASE WHEN TRAU_logstatus = 'true' THEN 1 WHEN  TRAU_logstatus = 'false' THEN 100
 , solverlogs as B WHERE A.ID = B.ID) AS A, (SELECT count(*) as instances from benchmarks) as B group by sat, unsat order by sat, unsat DESC;
 """
 
+HEATMAP_QUERY_2022 = """
+select (total % 100)                                                        as sat,
+       (total / 100)                                                        as unsat,
+       count(ID)                                                          as heat
+FROM (
+         SELECT ID,
+                (cvc5_numeric + ABC_numeric + ostrich_numeric + seq_numeric + z3str3_numeric + z3str4_numeric +
+                 princess_numeric)     as total
+         from (SELECT cvc5.ID as ID,
+                      CASE
+                          WHEN cvc5.benchexecstatus = 'true' THEN 1
+                          WHEN cvc5.benchexecstatus = 'false' THEN 100
+                          ELSE 0 END as cvc5_numeric,
+                       CASE
+                          WHEN ABC.benchexecstatus = 'true' THEN 1
+                          WHEN ABC.benchexecstatus = 'false' THEN 100
+                          ELSE 0 END as ABC_numeric,
+                       CASE
+                          WHEN ostrich.benchexecstatus = 'true' THEN 1
+                          WHEN ostrich.benchexecstatus = 'false' THEN 100
+                          ELSE 0 END as ostrich_numeric,
+                       CASE
+                          WHEN seq.benchexecstatus = 'true' THEN 1
+                          WHEN seq.benchexecstatus = 'false' THEN 100
+                          ELSE 0 END as seq_numeric,
+                       CASE
+                          WHEN z3str3.benchexecstatus = 'true' THEN 1
+                          WHEN z3str3.benchexecstatus = 'false' THEN 100
+                          ELSE 0 END as z3str3_numeric,
+                       CASE
+                          WHEN z3str4.benchexecstatus = 'true' THEN 1
+                          WHEN z3str4.benchexecstatus = 'false' THEN 100
+                          ELSE 0 END as z3str4_numeric,
+                       CASE
+                          WHEN princess.benchexecstatus = 'true' THEN 1
+                          WHEN princess.benchexecstatus = 'false' THEN 100
+                          ELSE 0 END as princess_numeric
+               FROM benchmarks LEFT JOIN cvc5 on BENCHMARKS.id = CVC5.id
+                LEFT JOIN abc on BENCHMARKS.id = abc.id
+                 Left Join ostrich on Benchmarks.id = OSTRICH.id
+                  Left Join princess on BENCHMARKs.id = PRINCESS.id
+                  LEFT JOIN seq on BEnchmarks.id = seq.id
+                   LEFT JOin z3str3 on benchmarks.id = z3str3.id
+                       Left Join z3str4 on benchmarks.id = z3str4.id) as A) as B
+group by sat, unsat
+order by sat, unsat DESC;
+"""
+
 OUTPUT_FOLDER = "figures/heatmap/"
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
 
-def collect_data():
-    cur = conn.cursor()
-    cur.execute(HEATMAP_QUERY)
-    with (open(os.path.join(OUTPUT_FOLDER, "raw_data_small.csv"), "w")) as outfile:
-        while row := cur.fetchone():
+def collect_data(con, query, outfile):
+    cur = con.cursor()
+    cur.execute(query)
+    with (open(os.path.join(OUTPUT_FOLDER, outfile), "w")) as outfile:
+        for row in cur.fetchall():
             print(str(row)[1:-1], file=outfile)
+    cur.close()
 
 
 def print_header(file):
@@ -68,16 +118,16 @@ def print_header(file):
     print(r"\def\ccw{\cellcolor{white}}", file=file)
 
 
-def compute_heatmap():
+def compute_heatmapA(data_file):
     data = {}
     for i in range(0, 11):
         data[i] = {}
-    with open(os.path.join(OUTPUT_FOLDER, "raw_data_small.csv")) as infile:
+    with open(os.path.join(OUTPUT_FOLDER, data_file)) as infile:
         for line in infile:
             parts = line.strip().split(",")
             data[int(parts[0])][int(parts[1])] = (parts[2], parts[3], parts[4])
 
-    with open(os.path.join(OUTPUT_FOLDER, "heatmap_small.tex"), "w") as outfile:
+    with open(os.path.join(OUTPUT_FOLDER, "heatmap_small_left.tex"), "w") as outfile:
         print_header(outfile)
         print(r"\begin{figure}", file=outfile)
         print(r"\resizebox{.99\columnwidth}{!}{", file=outfile)
@@ -129,7 +179,65 @@ def compute_heatmap():
         print("\\end{figure}", file=outfile)
         print(r"\end{document}", file=outfile)
 
+def compute_heatmapB(data_file):
+    data = {}
+    for i in range(0, 11):
+        data[i] = {}
+    with open(os.path.join(OUTPUT_FOLDER, data_file)) as infile:
+        for line in infile:
+            parts = line.strip().split(",")
+            data[int(parts[0])][int(parts[1])] = (parts[2])
+
+    with open(os.path.join(OUTPUT_FOLDER, "heatmap_small_right.tex"), "w") as outfile:
+        print_header(outfile)
+        print(r"\begin{figure}", file=outfile)
+        print(r"\resizebox{.99\columnwidth}{!}{", file=outfile)
+        print(r"\begin{tabular}{cr||r|r|r|r|r|r|r|r|}", file=outfile)
+        print(r"& & \multicolumn{8}{c|}{\textbf{UNSAT}}\\", file=outfile)
+        print(r"& & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7\\", file=outfile)
+        print("\hline \hline", file=outfile)
+        for i in range(0, 8):
+            if i == 0:
+                outfile.write(r"\multirow{16}{*}{\rot{90}{\textbf{SAT}}}")
+            outfile.write(" & ")
+            outfile.write(r"\multirow{2}{*}{" + str(i) + r"}")
+            lineB = " & "
+            for j in range(0, 8):
+                value = data[i].get(j, "")
+                if value != "":
+                    count = value
+                    value = str(count)
+                outfile.write(" & ")
+                if j > 7 - i:
+                    outfile.write(r"\ccg")
+                    lineB += r"\ccg"
+                if value.strip() != "":
+                    percent = int(count) / 4634
+                    percent = int(percent * 95 + 5)
+                    percent = min(percent, 99)
+                    outfile.write(
+                        (r"\ccs{" if i > j else (r"\ccu{" if i < j else "\ccw{"))
+                        + str(value)
+                        + r"}{"
+                        + str(percent)
+                        + "}"
+                    )
+                else:
+                    outfile.write(r"")
+            print(r"\\ \cline{2-10}", file=outfile)
+        print("\\end{tabular}", file=outfile)
+        print(r"}", file=outfile)
+        print(r"\label{fig:heatmap}", file=outfile)
+        print("\\end{figure}", file=outfile)
+        print(r"\end{document}", file=outfile)
 
 if __name__ == "__main__":
-    collect_data()
-    compute_heatmap()
+    print("Collecting data from 2021")
+    collect_data(conn, HEATMAP_QUERY, "raw_data_small.csv")
+    print("Collecting data from 2022")
+    collect_data(conn2022, HEATMAP_QUERY_2022, "raw_data_small2022.csv")
+    print("Genrating tables")
+    compute_heatmapA("raw_data_small.csv")
+    compute_heatmapB("raw_data_small2022.csv")
+    conn.close()
+    conn2022.close()

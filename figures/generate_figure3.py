@@ -45,11 +45,23 @@ group by
 
 cat = ["UNSAT", "SAT"]
 tools = ["ABC", "CVC4", "OSTRICH", "PRINCESS", "SEQ", "Z3STR3", "Z3STR4"]
+tools22 = ["ABC", "cvc5", "OSTRICH", "PRINCESS", "SEQ", "Z3STR3", "Z3STR4"]
 verdicts = ["FALSE", "TRUE", "UNKNOWN", "ERROR", "OUT OF MEMORY", "TIMEOUT"]
 
 OUTPUT_FOLDER = "figures/summary_sat_unsat/"
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 data = {}
+data22 = {}
+
+
+for c in cat:
+    data22[c] = {}
+    for v in verdicts:
+        data22[c][v] = {}
+        data22[c][v]["VOTE"] = 0
+        for t in tools22:
+            data22[c][v][t] = 0
+
 for c in cat:
     data[c] = {}
     for v in verdicts:
@@ -68,7 +80,10 @@ STYLES = [
 ]
 
 conn = sqlite3.connect("../database/string_schema.sqlite")
+conn22 = sqlite3.connect("../database/string_schema_ase_journal.sqlite")
 cursor = conn.cursor()
+
+print("FETCHING 2021 data")
 cursor.execute(QUERY_VOTE)
 for row in cursor.fetchall():
     print(row[0], row[1], data)
@@ -79,8 +94,21 @@ for t in tools:
     print(t)
     cursor.execute(query)
     for row in cursor.fetchall():
-        print(t, row)
-        data[row[0]][row[1]][t] = row[2]
+        label = row[1] if not row[1].startswith("ERROR") else "ERROR"
+        print(t, row, label)
+        data[row[0]][label][t] += int(row[2])
+
+print("FETCHING 2022 data")
+cursor22 = conn22.cursor()
+for t in tools22:
+    query = QUERY_SOLVER.replace("%%tool%%", t)
+    print(t)
+    cursor22.execute(query)
+    for row in cursor22.fetchall():
+        label = row[1] if not row[1].startswith("ERROR") else "ERROR"
+        print(t, row, label, data22[row[0]][label])
+        data22[row[0]][label][t] += int(row[2])
+
 
 JOINED_HEAD = r"""\documentclass[]{article}
 \usepackage{tikz}
@@ -100,8 +128,8 @@ JOINED_FOOTER = r"""\legend{UNSAT, SAT, unknown, ERROR, OUT OF MEMORY, TIMEOUT}
 \end{document}"""
 
 
-def create_sat_plot():
-    with open(os.path.join(OUTPUT_FOLDER, "summary_sat.tex"), "w") as outfile:
+def create_sat_plot(cvcname, dataX, outname):
+    with open(os.path.join(OUTPUT_FOLDER, outname), "w") as outfile:
         print(JOINED_HEAD, file=outfile)
         print(
             r"""\begin{axis}[
@@ -126,7 +154,7 @@ def create_sat_plot():
         width=0.5\textwidth,
         height=0.5\textwidth,
         ]
-    """,
+    """.replace("CVC4", cvcname),
             file=outfile,
         )
 
@@ -134,15 +162,16 @@ def create_sat_plot():
             print(r"\addplot+[ybar" + style + r"] plot coordinates { ", file=outfile)
 
             for t in tools:
-                print("(" + t + ", " + str(data[cat[1]][v][t]) + ") ", file=outfile)
+                t =t.replace("CVC4", cvcname) 
+                print("(" + t.replace("CVC4", cvcname) + ", " + str(dataX[cat[1]][v][t]) + ") ", file=outfile)
 
             print(r" };", file=outfile)
 
         print(JOINED_FOOTER, file=outfile)
 
 
-def create_unsat_plot():
-    with open(os.path.join(OUTPUT_FOLDER, "summary_unsat.tex"), "w") as outfile:
+def create_unsat_plot(cvcname, dataX, outname):
+    with open(os.path.join(OUTPUT_FOLDER, outname), "w") as outfile:
         print(JOINED_HEAD, file=outfile)
         print(
             r"""\begin{axis}[
@@ -167,7 +196,7 @@ def create_unsat_plot():
         bar width=5mm,
         width=0.6\textwidth,
         height=0.6\textwidth]
-    """,
+    """.replace("CVC4", cvcname),
             file=outfile,
         )
 
@@ -175,7 +204,8 @@ def create_unsat_plot():
             print(r"\addplot+[ybar" + style + r"] plot coordinates { ", file=outfile)
 
             for t in tools:
-                print("(" + t + ", " + str(data[cat[0]][v][t]) + ") ", file=outfile)
+                t = t.replace("CVC4", cvcname) 
+                print("(" + t.replace("CVC4", cvcname) + ", " + str(dataX[cat[0]][v][t]) + ") ", file=outfile)
 
             print(r" };", file=outfile)
 
@@ -183,5 +213,11 @@ def create_unsat_plot():
 
 
 if __name__ == "__main__":
-    create_sat_plot()
-    create_unsat_plot()
+    print("CREATE SAT PLOT 2021")
+    create_sat_plot("CVC4", data, "summary_sat_2021.tex")
+    print("CREATE SAT PLOT 2022")
+    create_sat_plot("cvc5", data22, "summary_sat_2022.tex")
+    print("CREATE UNSAT PLOT 2021")
+    create_unsat_plot("CVC4", data, "summary_unsat_2021.tex")
+    print("CREATE UNSAT PLOT 2022")
+    create_unsat_plot("cvc5", data22, "summary_unsat_2022.tex")

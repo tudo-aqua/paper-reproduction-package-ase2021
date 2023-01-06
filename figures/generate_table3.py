@@ -1,218 +1,235 @@
 #!/usr/bin/env python3
 import os
 import sqlite3
-import pandas as pd
-import numpy as np
 
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import precision_recall_fscore_support
+SOLVER_PLACEHOLDER = "%XXX%"
 
-LEARNING_VIEW = r"""create view if not exists learning
-            (str_eq, not_op, equals, len, and_op, ite, at, ge, minus, substr, indefox, contains, plus, uminus,
-             str_concat, replace, le, in_re, prefixof, str_to_re, re_concat, gt, kleenestar, re_union, lt, range,
-             kleeneplus, mult, allchar, suffixof, "cast", emptystr, or_op, exist, str_to_int, int_to_str, inter, div,
-             replaceall, mod, imply, upper, lower, benchmark, abc, cvc4, ostrich, princess, seq, z3str3, z3str4)
-as
-SELECT f.str_eq,
-       f.not_op,
-       f.equals,
-       f.len,
-       f.and_op,
-       f.ite,
-       f.at,
-       f.ge,
-       f.minus,
-       f.substr,
-       f.indefox,
-       f.contains,
-       f.plus,
-       f.uminus,
-       f.str_concat,
-       f.replace,
-       f.le,
-       f.in_re,
-       f.prefixof,
-       f.str_to_re,
-       f.re_concat,
-       f.gt,
-       f.kleenestar,
-       f.re_union,
-       f.lt,
-       f.range,
-       f.kleeneplus,
-       f.mult,
-       f.allchar,
-       f.suffixof,
-       f.cast_op                                AS "cast",
-       f.emptystr,
-       f.or_op,
-       f.exist,
-       f.str_to_int,
-       f.int_to_str,
-       f.inter,
-       f.div,
-       f.replaceall,
-       f.mod,
-       f.imply,
-       f.upper,
-       f.lower,
-       a.benchmark,
-       a.abc % 1000 / 100 + a.abc % 2           AS abc,
-       a.cvc4 % 1000 / 100 + a.cvc4 % 2         AS cvc4,
-       a.ostrich % 1000 / 100 + a.ostrich % 2   AS ostrich,
-       a.princess % 1000 / 100 + a.princess % 2 AS princess,
-       a.seq % 1000 / 100 + a.seq % 2           AS seq,
-       a.z3str3 % 1000 / 100 + a.z3str3 % 2     AS z3str3,
-       a.z3str4 % 1000 / 100 + a.z3str4 % 2     AS z3str4
-FROM benchexec_all_numeric a,
-     operator_features f
-WHERE a.id = f.id;"""
+STRATEGIES = [
+    "FASTEST",
+    "JEARLY",
+    "FASTEST_NO_ABC_Z3STR4",
+    "JEARLYTRUSTED",
+    "MULTI",
+    "MULTI_NO_UNSAT_CHECK2022",
+    "ABC",
+    "CVC5",
+    "SEQ",
+    "Z3STR3",
+    "Z3STR4",
+    "PRINCESS",
+    "OSTRICH",
+]
+BENCHMARKS = {
+    "appscan": "Apspscan",
+    "banditfuzz": "BanditFuzz",
+    "cashewsuite": "Cashew",
+    "light": "Trau Light",
+    "pisa": "Pisa",
+    "jdart": "SVCOMP",
+    "woorpje": "WWE",
+    "joacosuite": "Joaco",
+    "Kaluza": "Kaluza",
+    "PyEx": "PyEx",
+    "stringfuzz": "StringFuzz",
+    "Leetcode": "Leetcode",
+    "strangersuite": "Stranger",
+    "z3_regression": "Z3str3",
+    "nornbenchmarks": "Norn",
+    "kauslersuite": "Kausler",
+    "slothtests": "Sloth",
+}
 
-RESULTFOLDER = "tables/learning"
-os.makedirs(RESULTFOLDER, exist_ok=True)
-TARGET_CSV = os.path.join(RESULTFOLDER, "learning_table.csv")
-TARGET_TABLE = os.path.join(RESULTFOLDER, "learning_table.tex")
+SOLVERS = [
+    "ABC",
+    "CVC5",
+    "JEARLY",
+    "JEARLYTRUSTED",
+    "JZ3SEQ",
+    "MULTI",
+    "MULTI_NO_UNSAT_CHECK2022",
+    "SEQ",
+    "Z3STR3",
+    "Z3STR4",
+    "PRINCESS",
+    "OSTRICH",
+]
+
+SOLVER_QUERY = f"""
+SELECT sum(correct) as correct, sum(dontknow) as unknown, sum(error) as error, sum(timeout) as timeout, sum(incorrect) as incorrect, COUNT(id) from (
+SELECT a.benchmark as benchmark,
+       CASE WHEN A.gt_voting2022 = B.benchexecstatus and b.benchexecstatus != 'unknown' THEN 1 ELSE 0 End as correct,
+       CASE WHEN B.benchexecstatus = 'unknown' THEN 1 ELSE 0 END as dontknow,
+       CASE WHEN B.benchexecstatus LIKE 'ERROR%' or upper(B.benchexecstatus) = 'OUT OF MEMORY' or B.benchexecstatus = 'ABORTED' or B.benchexecstatus = 'FAILED' THEN 1 ELSE 0 END as error,
+       CASE WHEN B.benchexecstatus LIKE 'TIMEOUT%' THEN 1 ELSE 0 END as timeout,
+       CASE WHEN (B.benchexecstatus = 'true' or B.benchexecstatus = 'false') and A.gt_voting2022 != B.benchexecstatus and b.benchexecstatus != 'unknown' THEN 1 ELSE 0 END as incorrect,
+       B.id
+from benchmarks as A,
+     {SOLVER_PLACEHOLDER} as B
+where A.ID = B.ID and a.gt_voting2022 != 'unknown' and a.gt_voting2022 != 'tie') as A;
+"""
+
+UNIQUE_COUNTS = f"""SELECT benchmark, count(ID) from benchmarks GROUP BY benchmark;"""
+
+TIMINGS = """
+SELECT 'Earliest' as Solver, SUM(CPU)*7 from fastest as a, BENCHMARKS as b where a.id = b.id and GT_VOTING2022 != 'unknown' and GT_VOTING2022 != 'tie'
+Union
+SELECT 'EarliestTrusted', SUM(CPU)*7 from fastest_no_abc_z3str4 as a, BENCHMARKS as b where a.id = b.id and GT_VOTING2022 != 'unknown' and GT_VOTING2022 != 'tie'
+Union
+SELECT 'JEARLY', SUM(CPU) from jearly as a, BENCHMARKS as b where a.id = b.id and GT_VOTING2022 != 'unknown' and GT_VOTING2022 != 'tie'
+Union
+SELECT 'JEARLYTRUSTED', SUM(CPU) from jearlytrusted as a, BENCHMARKS as b where a.id = b.id and GT_VOTING2022 != 'unknown' and GT_VOTING2022 != 'tie'
+Union
+SELECT 'CvcSeqCores', SUM(cpu) from MULTI as a, BENCHMARKS as b where a.id = b.id and GT_VOTING2022 != 'unknown' and GT_VOTING2022 != 'tie'
+Union
+SELECT 'CvcSeqEval', SUM(cpu) from MULTI_NO_UNSAT_CHECK2022 as a, BENCHMARKS as b where a.id = b.id and GT_VOTING2022 != 'unknown' and GT_VOTING2022 != 'tie'
+Union
+SELECT 'ABC', SUM(CPU) from ABC as a, BENCHMARKS as b where a.id = b.id and GT_VOTING2022 != 'unknown' and GT_VOTING2022 != 'tie'
+Union
+SELECT 'CVC5', SUM(cpu) from cvc5 as a, BENCHMARKS as b where a.id = b.id and GT_VOTING2022 != 'unknown' and GT_VOTING2022 != 'tie'
+Union
+SELECT 'SEQ',SUM(cpu) from SEQ as a, BENCHMARKS as b where a.id = b.id and GT_VOTING2022 != 'unknown' and GT_VOTING2022 != 'tie'
+Union
+SELECT 'Z3STR3', SUM(cpu) from Z3STR3 as a, BENCHMARKS as b where a.id = b.id and GT_VOTING2022 != 'unknown' and GT_VOTING2022 != 'tie'
+Union
+SELECT 'Z3STR4', SUM(cpu) from Z3STR4 as a, BENCHMARKS as b where a.id = b.id and GT_VOTING2022 != 'unknown' and GT_VOTING2022 != 'tie'
+Union
+SELECT 'PRINCESS', SUM(cpu) from PRINCESS as a, BENCHMARKS as b where a.id = b.id and GT_VOTING2022 != 'unknown' and GT_VOTING2022 != 'tie'
+Union
+SELECT 'OSTRICH', SUM(cpu) from OSTRICH as a, BENCHMARKS as b where a.id = b.id and GT_VOTING2022 != 'unknown' and GT_VOTING2022 != 'tie';"""
 
 
-def create_view(conn):
-    conn.execute(LEARNING_VIEW)
-    conn.commit()
+OUTPUT_FOLDER = "tables/solver_performance"
+os.makedirs(OUTPUT_FOLDER, exist_ok=True)
+conn = sqlite3.connect("../database/string_schema_ase_journal.sqlite")
 
 
-def export_data(conn):
-    cur = conn.cursor()
-    cur.execute("select * from learning")
-    headers = [description[0] for description in cur.description]
-    with open(TARGET_CSV, "w") as outf:
-        while not (df := pd.DataFrame(cur.fetchall())).empty:
-            df.to_csv(outf, header=headers, index=False, sep=";")
+class SolverData:
+    def __init__(self, benchmark, correct, unknown, error, timeout, incorrect):
+        self.benchmark = benchmark
+        self.correct = correct
+        self.unknown = unknown
+        self.error = error
+        self.timeout = timeout
+        self.incorrect = incorrect
 
 
-def write_table():
-    with open(TARGET_TABLE, "w") as outf:
-        print(
-            r"""\documentclass[]{article}
-\usepackage{graphicx}
-\begin{document}
-\begin{figure}
-\resizebox{1\textwidth}{!}{""",
-            file=outf,
+def clean_benchmark_names(benchmark):
+    return BENCHMARKS[benchmark]
+
+
+def get_data_for_solver(solver):
+    cursor = conn.cursor()
+    query = SOLVER_QUERY.replace(SOLVER_PLACEHOLDER, solver)
+    cursor.execute(query)
+    for (
+        correct,
+        unknown,
+        error,
+        timeout,
+        incorrect,
+        check_sum,
+    ) in cursor.fetchall():
+        assert correct + unknown + error + timeout + incorrect == check_sum, (
+            "sum ist no met for solver " + solver,
+            correct,
+            unknown,
+            error,
+            timeout,
+            incorrect,
+            check_sum,
         )
-        print("\\begin{tabular}{l|rrr|lrlrlrlrlr} \\hline", file=outf)
-        print(
-            "\\textbf{Solver} & \\textbf{Precision} & \\textbf{Recall} & \\textbf{$F_1$ Score} & \\multicolumn{10}{c}{\\textbf{Important Variables}} \\\\ \\hline \\hline",
-            file=outf,
-        )
+        data = SolverData(solver, correct, unknown, error, timeout, incorrect)
+    return data
 
-        for solver in ["abc", "cvc4", "ostrich", "princess", "seq", "z3str3", "z3str4"]:
 
-            features = pd.read_csv(TARGET_CSV, ";")
-            features = pd.get_dummies(features)
+def get_maximum_per_benchmark(data):
+    result = []
+    current_max = -1
+    for key, solver in data.items():
+        val = solver.correct
+        if val > current_max:
+            current_max = val
+    return current_max
 
-            labels = np.array(features[solver])
-            labels = (labels) + 1
 
-            features = features.drop("abc", axis=1)
-            features = features.drop("cvc4", axis=1)
-            features = features.drop("ostrich", axis=1)
-            features = features.drop("princess", axis=1)
-            features = features.drop("seq", axis=1)
-            features = features.drop("z3str3", axis=1)
-            features = features.drop("z3str4", axis=1)
+def generate_table(data, timing):
+    maximum = get_maximum_per_benchmark(data)
+    columns = ""
+    column_header = ""
+    times = "CPU time (s) "
+    for s in STRATEGIES:
+        print("running solver: ", s)
+        if s == "MULTI":
+            s = "CvcSeqCores"
+        if s == "MULTI_NO_UNSAT_CHECK2022":
+            s = "CvcSeqEval"
+        if s == "FASTEST_NO_ABC_Z3STR4":
+            s = "EarliestTrusted"
+        if s == "FASTEST":
+            s = "Earliest"
+        columns += " r |"
+        column_header += r"\multicolumn{1}{c|}{\rot{75}{" + s + "}} &\n"
+        times += " & " + str(timing[s])
 
-            features = features.drop("benchmark_Kaluza", axis=1)
-            features = features.drop("benchmark_Leetcode", axis=1)
-            features = features.drop("benchmark_PyEx", axis=1)
-            features = features.drop("benchmark_appscan", axis=1)
-            features = features.drop("benchmark_banditfuzz", axis=1)
-            features = features.drop("benchmark_cashewsuite", axis=1)
-            features = features.drop("benchmark_jdart", axis=1)
-            features = features.drop("benchmark_joacosuite", axis=1)
-            features = features.drop("benchmark_kauslersuite", axis=1)
-            features = features.drop("benchmark_light", axis=1)
-            features = features.drop("benchmark_nornbenchmarks", axis=1)
-            features = features.drop("benchmark_pisa", axis=1)
-            features = features.drop("benchmark_slothtests", axis=1)
-            features = features.drop("benchmark_strangersuite", axis=1)
-            features = features.drop("benchmark_stringfuzz", axis=1)
-            features = features.drop("benchmark_woorpje", axis=1)
-            features = features.drop("benchmark_z3_regression", axis=1)
+    table = (
+        r"\documentclass[]{article}"
+        "\n"
+        r"\usepackage{graphicx}"
+        "\n"
+        r"\def\rot{\rotatebox}"
+        "\n"
+        r"\begin{document}"
+        "\n"
+        r"""
+                            \resizebox{0.95\textwidth}{!}{
+                            \begin{tabular}{|l||"""
+        + columns
+        + r"""} \hline
+    &"""
+        + column_header[:-2]
+        + r""" \\ \hline \hline
+        """
+    )
 
-            feature_list = [
-                f.replace("_", "\\_").replace("indefox", "indexof")
-                for f in list(features.columns)
-            ]
-            features = np.array(features)
+    table += "\\hline "
+    for row in ["correct", "unknown", "error", "timeout", "incorrect"]:
+        table += f"{row} "
+        for solver in STRATEGIES:
+            val = getattr(data[solver], row)
+            if val == maximum and row == "correct":
+                val = "\\textbf{" + str(val) + "}"
+            table += f" & {val}"
+        table += "\\\\ \\hline\n"
+    table += times
+    table += "\\\\ \\hline\n"
 
-            importances = []
-            precision = []
-            recall = []
-            fscore = []
+    table += r"""\end{tabular}}
+            \end{document}
+        """
+    with open(
+        os.path.join(OUTPUT_FOLDER, "table-solver-performance-generated2022.tex"),
+        "w",
+    ) as outfile:
+        outfile.write(table)
 
-            for i in range(5):
 
-                (
-                    train_features,
-                    test_features,
-                    train_labels,
-                    test_labels,
-                ) = train_test_split(features, labels, test_size=0.5)
+def collect_data():
+    data = {}
+    for solver in STRATEGIES:
+        data[solver] = get_data_for_solver(solver)
+    return data
 
-                rf = RandomForestClassifier(n_estimators=100, min_impurity_decrease=0.0)
-                rf.fit(train_features, train_labels)
-                predictions = rf.predict(test_features)
 
-                importances.append(list(rf.feature_importances_))
-                p, r, f, support = precision_recall_fscore_support(
-                    test_labels, predictions, average="weighted"
-                )
-                precision.append(p)
-                recall.append(r)
-                fscore.append(f)
-
-            imp_avg = np.array(importances).mean(axis=0)
-            imp_std = np.array(importances).std(axis=0)
-
-            precision_avg = np.array(precision).mean()
-            precision_std = np.array(precision).std()
-            recall_avg = np.array(recall).mean()
-            recall_std = np.array(recall).std()
-            fscore_avg = np.array(fscore).mean()
-            fscore_std = np.array(fscore).std()
-
-            line = "" + solver
-            line += " & ${:.2f} ~ ({:.2f})$".format(precision_avg, precision_std)
-            line += " & ${:.2f} ~ ({:.2f})$".format(recall_avg, recall_std)
-            line += " & ${:.2f} ~ ({:.2f})$".format(fscore_avg, fscore_std)
-
-            feature_importances = [
-                (feature, round(imp_avg, 4), round(imp_std, 4))
-                for feature, imp_avg, imp_std in zip(feature_list, imp_avg, imp_std)
-            ]
-
-            feature_importances = sorted(
-                feature_importances, key=lambda x: x[1], reverse=True
-            )
-
-            for i in range(5):
-                line += " & \\texttt{{{}}} & ${:.2f} ~ ({:.2f})$".format(
-                    *feature_importances[i]
-                )
-
-            print(line, "\\\\ \\hline", file=outf)
-
-        print("\\end{tabular}", file=outf)
-        print(
-            r"""}
-\end{figure}
-\end{document}""",
-            file=outf,
-        )
+def collect_times():
+    timing = {}
+    cursor = conn.cursor()
+    cursor.execute(TIMINGS)
+    for solver, time in cursor.fetchall():
+        timing[solver] = round(time)
+    return timing
 
 
 if __name__ == "__main__":
-    conn = sqlite3.connect("../database/string_schema.sqlite")
-    create_view(conn)
-    export_data(conn)
-    write_table()
+    data = collect_data()
+    timing = collect_times()
+    generate_table(data, timing)
