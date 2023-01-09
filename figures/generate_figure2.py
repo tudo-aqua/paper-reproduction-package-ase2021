@@ -115,7 +115,7 @@ def print_header(file):
     print(r"\def\ccu#1#2{\cellcolor{red!20}{#1}}", file=file)
     print(r"\def\ccn#1#2{\cellcolor{white!#2}{#1})}", file=file)
     print(r"\def\ccg{\cellcolor{gray!25}{}}", file=file)
-    print(r"\def\ccw{\cellcolor{white}}", file=file)
+    print(r"\def\ccw#1#2{\cellcolor{white}{#1}}", file=file)
 
 
 def compute_heatmapA(data_file):
